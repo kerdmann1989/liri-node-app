@@ -10,7 +10,7 @@ var phrase = input[2];
 var selection = "";
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
-
+var moment = require('moment');
 
 for (var i = 3; i < input.length; i++){
   if (i > 3 && i < input.length) {
@@ -20,8 +20,10 @@ for (var i = 3; i < input.length; i++){
   }
 }
 
+
+
 function movie() {
-    if (selection == null) {
+    if (selection === "") {
     selection = "Mr. Nobody";
 } 
 
@@ -44,25 +46,57 @@ request("http://www.omdbapi.com/?t="+selection+"&y=&plot=short&tomatoes=True&api
 }
 
 function spotifyThis() {
-  if (selection === null) {
-    selection == "The Sign";
-  }
+  if (selection === "") {
+    selection = "The Sign";
+  } 
+
   spotify.search ({type: 'track', query: selection}, function(err, data) {
+    
+
     if (err) {
      console.log('Error occurred: ' + err);
      return;
 
     } else {
-      console.log("\n\r")
+
       console.log("============================== SPOTIFY ==============================" + "\n")
       console.log("Artist: " + data.tracks.items[0].album.artists[0].name + "\n");
-      console.log("Song Title: " + data.tracks.items[0].name  + "\n");
-      console.log("Song preview: " + data.tracks.items[0].artists[0].external_urls.spotify  + "\n");
+      console.log("Song Title: " + data.tracks.items[0].name + "\n");
+      console.log("Song Preview: " + data.tracks.items[0].artists[0].external_urls.spotify  + "\n");
       console.log("Album Name: " + data.tracks.items[0].album.name  + "\n");
       console.log("=====================================================================" + "\n")
     }
   });
 } 
+
+function concert() {
+  if (selection === "") {
+    console.log("\n\r");
+    console.log("============================================="  + "\n" );
+    console.log("WE COULD NOT FIND ANY INFORMATION. TRY AGAIN" + "\n");
+    console.log("============================================="  + "\n" );
+    console.log("\n\r");
+} 
+
+request("https://rest.bandsintown.com/artists/" + selection + "/events?app_id=codingbootcamp", function(error, response, body) {
+// If the request is successful (i.e. if the response status code is 200)
+if (!error && response.statusCode === 200) {
+
+  jsonBody = JSON.parse(body);
+  var eventDate = jsonBody[0].datetime;
+  eventDate = moment().format("MM/DD/YYYY");
+
+  console.log("\n\r");
+  console.log("==================================== BANDS IN TOWN ===================================="  + "\n" );
+  console.log("Lineup: " + jsonBody[0].lineup);
+  console.log("Venue: " + jsonBody[0].venue.name);
+  console.log("Location: " + jsonBody[0].venue.city + ", " + jsonBody[0].venue.city)
+  console.log("Event Date: " + eventDate);
+  console.log("\n\r");
+  console.log("========================================================================================"  + "\n" );
+}
+});
+}
 
 switch (phrase) {
 case "spotify-this-song":
