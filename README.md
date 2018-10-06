@@ -8,5 +8,3 @@ node liri.js spotify-this-song <song name here>
 node liri.js movie-this <movie title here>
 node liri.js concert-this <band or artists name here>
 node liri.js do-what-it-says
-  
-[Concert-This Screenshot]url ("https://github.com/kerdmann1989/liri-node-app/blob/master/images/ConcertThis.PNG")
