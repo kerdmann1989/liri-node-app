@@ -20,8 +20,6 @@ Uses the Spotify API to retrieve information about the song entered by the user:
 
 If user does not enter a song "The Sign" by Ace of Base will appear.
 
-[View screenshot](images/SpotifyAceofBase.png)
-
 ### Movie This
 Uses the OMDB API to retrieve information about a movie entered by the user:
 * Movie Title
