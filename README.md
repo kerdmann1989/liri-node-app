@@ -9,3 +9,6 @@ node liri.js movie-this <movie title here>
 node liri.js concert-this <band or artists name here>
 node liri.js do-what-it-says
   
+<video width="320" height="240" controls>
+  <source src="video.mov" type="video/mp4">
+</video>
