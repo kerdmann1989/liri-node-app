@@ -5,12 +5,13 @@ var keys = require("./keys")
 // var spotifyAPI = require("./keys")
 var fs = require("fs");
 var request = require("request");
-var input = process.argv;
+var input = process.argv
 var phrase = input[2];
 var selection = "";
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var moment = require('moment');
+
 
 for (var i = 3; i < input.length; i++){
   if (i > 3 && i < input.length) {
@@ -47,18 +48,20 @@ request("http://www.omdbapi.com/?t="+selection+"&y=&plot=short&tomatoes=True&api
 
 function spotifyThis() {
   if (selection === "") {
-    selection = "The Sign";
+    selection = "The Sign Ace";
   } 
 
+ 
+  
   spotify.search ({type: 'track', query: selection}, function(err, data) {
     
-
     if (err) {
      console.log('Error occurred: ' + err);
      return;
+     
 
     } else {
-
+      
       console.log("============================== SPOTIFY ==============================" + "\n")
       console.log("Artist: " + data.tracks.items[0].album.artists[0].name + "\n");
       console.log("Song Title: " + data.tracks.items[0].name + "\n");
@@ -80,22 +83,22 @@ function concert() {
 
 request("https://rest.bandsintown.com/artists/" + selection + "/events?app_id=codingbootcamp", function(error, response, body) {
 // If the request is successful (i.e. if the response status code is 200)
-if (!error && response.statusCode === 200) {
+  if (!error && response.statusCode === 200) {
 
-  jsonBody = JSON.parse(body);
-  var eventDate = jsonBody[0].datetime;
-  eventDate = moment().format("MM/DD/YYYY");
+    jsonBody = JSON.parse(body);
+    var eventDate = jsonBody[0].datetime;
+    eventDate = moment().format("MM/DD/YYYY");
 
-  console.log("\n\r");
-  console.log("==================================== BANDS IN TOWN ===================================="  + "\n" );
-  console.log("Lineup: " + jsonBody[0].lineup);
-  console.log("Venue: " + jsonBody[0].venue.name);
-  console.log("Location: " + jsonBody[0].venue.city + ", " + jsonBody[0].venue.city)
-  console.log("Event Date: " + eventDate);
-  console.log("\n\r");
-  console.log("========================================================================================"  + "\n" );
-}
-});
+    console.log("\n\r");
+    console.log("==================================== BANDS IN TOWN ===================================="  + "\n" );
+    console.log("Lineup: " + jsonBody[0].lineup);
+    console.log("Venue: " + jsonBody[0].venue.name);
+    console.log("Location: " + jsonBody[0].venue.city + ", " + jsonBody[0].venue.city)
+    console.log("Event Date: " + eventDate);
+    console.log("\n\r");
+    console.log("========================================================================================"  + "\n" );
+  }
+  });
 }
 
 switch (phrase) {
@@ -112,6 +115,27 @@ case "concert-this":
   break;
 
 case "do-what-it-says":
-  doWhatItSays();
+
+// This block of code will read from the "random.txt" file.
+// It's important to include the "utf8" parameter or the code will provide stream data (garbage)
+// The code will store the contents of the reading inside the variable "data"
+  fs.readFile("random.txt", "utf8", function(error, data) {
+
+    // If the code experiences any errors it will log the error to the console.
+  if (error) {
+    return console.log(error);
+  }
+
+    // Then split it by commas (to make it more readable)
+  var dataArr = data.split(",");
+
+    //Push answers into variables for input and selection
+  input = dataArr[0];
+  selection = dataArr[1];
+
+  //Call the spotifyThis function
+  spotifyThis();
+
+  })
   break;
-}
+  }
